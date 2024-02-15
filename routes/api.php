@@ -15,7 +15,7 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 
 Route::group([
 
-    'middleware' => 'api',
+    'middleware' => ['api', 'cors'],
     'prefix' => 'auth'
 
 ], function ($router) {

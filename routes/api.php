@@ -28,7 +28,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'auth',
+    // 'middleware' => 'auth',
 ], function ($router) {
 
     // accounts

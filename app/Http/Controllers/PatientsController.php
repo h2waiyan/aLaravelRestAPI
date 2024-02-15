@@ -143,6 +143,7 @@ class PatientsController extends Controller
             $patient->is_vot_patient = $request['is_vot_patient'];
             $patient->volunteer_id = $request['volunteer_id'];
             $patient->vot_start_date = $request['vot_start_date'];
+            $patient->vot_type = $request['vot_type'];
             $patient->save();
             return response()->json([
                 'status' => 'success',

@@ -28,7 +28,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['api', 'cors'],
+    'middleware' => ['cors'],
 ], function ($router) {
 
     // accounts

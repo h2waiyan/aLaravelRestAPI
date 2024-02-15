@@ -26,10 +26,10 @@ return new class extends Migration
             $table->string('address');
             $table->date('treatment_start_date');
             $table->string('treatment_regimen');
-            $table->boolean('is_vot_patient');
+            $table->boolean('is_vot_patient')->default(false);
             $table->integer('volunteer_id');
-            $table->date('vot_start_date');
-            $table->integer('vot_type');
+            $table->date('vot_start_date')->nullable();
+            $table->integer('vot_type')->nullable();
         });
     }
 

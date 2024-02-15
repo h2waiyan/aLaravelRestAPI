@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Account;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -10,7 +10,7 @@ class AccountsController extends Controller
 {
     public function index()
     {
-        $accounts = Account::all();
+        $accounts = User::all();
         if ($accounts->count() > 0) {
             $data = [
                 'status' => 'success',
@@ -19,7 +19,8 @@ class AccountsController extends Controller
         } else {
             $data = [
                 'status' => 'error',
-                'message' => 'No accounts found.'
+                'message' => 'No accounts found.',
+                'accounts'=> []
             ];
         }
         return response()->json($data, 200);
@@ -31,7 +32,7 @@ class AccountsController extends Controller
             'name' => 'required|string',
             'email' => 'required|string|email',
             'password' => 'required|string',
-            'role' => 'required|digits:1'
+            'role' => 'required|string'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -40,7 +41,7 @@ class AccountsController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         } else {
-            $account = Account::create(
+            $account = User::create(
                 [
                     'name' => $request['name'],
                     'email' => $request['email'],
@@ -66,7 +67,7 @@ class AccountsController extends Controller
 
     public function show($id) 
     {
-        $account = Account::find($id);
+        $account = User::find($id);
         if ($account) {
             return response()->json([
                 'status' => 'success',
@@ -95,7 +96,7 @@ class AccountsController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         } else {
-            $account = Account::find($id);
+            $account = User::find($id);
             if ($account) {
                 $account->update([
                     'name' => $request['name'],
@@ -119,7 +120,7 @@ class AccountsController extends Controller
 
     public function destroy(int $id)
     {
-        $account = Account::find($id);
+        $account = User::find($id);
         if ($account) {
             $account->delete();
             return response()->json([

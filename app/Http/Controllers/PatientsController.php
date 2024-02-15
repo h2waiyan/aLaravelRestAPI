@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use App\Models\Volunteer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -10,7 +11,7 @@ class PatientsController extends Controller
 {
     public function index()
     {
-        $patients = Patient::all();
+        $patients = Patient::where('is_vot_patient', 0)->get();
         if ($patients->count() > 0) {
             $data = [
                 'status' => 'success',
@@ -19,38 +20,57 @@ class PatientsController extends Controller
         } else {
             $data = [
                 'status' => 'error',
-                'message' => 'No patients found.'
+                'message' => 'No patients found.',
+                'patients' => []
             ];
         }
         return response()->json($data, 200);
     }
 
+    public function vot_index() 
+    {
+        // filter patients with is_vot_patient = true
+        $patients = Patient::where('is_vot_patient', 1)->get();
+        if ($patients->count() > 0) {
+            $data = [
+                'status' => 'success',
+                'patients' => $patients
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'message' => 'No VOT patients found.',
+                'patients' => []
+            ];
+        }
+        return response()->json($data, 200);
+    }
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'reg_year' => 'required|digits:4',
-            'dob' => 'required|date',
-            'age' => 'required|digits:2',
-            'drtb_code' => 'required|digits:1',
-            'password' => 'required|string',
-            'township' => 'required|string',
-            'referred_by_volunteer' => 'required|digits:1',
-            'patient_code' => 'required|digits:4',
-            'address' => 'required|string',
-            'treatment_start_date' => 'required|date',
-            'treatment_regimen' => 'required|digits:1',
-            'is_vot_patient' => 'required|boolean',
-            'volunteer_id'=> 'string',
-            'vot_start_date' => 'string',
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        } else {
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required|string',
+        //     'reg_year' => 'required|digits',
+        //     'dob' => 'required|date',
+        //     'age' => 'required|digits',
+        //     'drtb_code' => 'required|digits',
+        //     'password' => 'required|string',
+        //     'township' => 'required|string',
+        //     'referred_by_volunteer' => 'required|digits',
+        //     'patient_code' => 'required|string',
+        //     'address' => 'required|string',
+        //     'treatment_start_date' => 'required|date',
+        //     'treatment_regimen' => 'required|string',
+        //     'is_vot_patient' => 'required|boolean',
+        //     'volunteer_id'=> 'string',
+        //     'vot_start_date' => 'string',
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Validation error',
+        //         'errors' => $validator->errors()
+        //     ], 422);
+        // } else {
             $patient = Patient::create(
                 [
                     'name' => $request['name'],
@@ -66,8 +86,9 @@ class PatientsController extends Controller
                     'treatment_start_date' => $request['treatment_start_date'],
                     'treatment_regimen' => $request['treatment_regimen'],
                     'is_vot_patient' => $request['is_vot_patient'],
-                    'volunteer_id'=>  $request['volunteer_id'],
                     'vot_start_date' => $request['vot_start_date'],
+                    'volunteer_id' => $request['volunteer_id'],
+                    "vot_type" => $request['vot_type']
                 ]
             );
 
@@ -82,7 +103,7 @@ class PatientsController extends Controller
                     'message' => 'Failed to add patient.'
                 ], 500);
             }
-        }
+        // }
     }
 
     public function show($id) 
@@ -96,7 +117,8 @@ class PatientsController extends Controller
         } else {
             $data = [
                 'status' => 'error',
-                'message' => 'Patient not found.'
+                'message' => 'Patient not found.',
+                'patient' => []
             ];
         }
         return response()->json($data, 200);

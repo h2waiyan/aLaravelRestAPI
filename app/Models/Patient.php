@@ -27,6 +27,7 @@ class Patient extends Model
         'is_vot_patient',
         'volunteer_id',
         'vot_start_date',
+        'vot_type'
     ];
 }
 

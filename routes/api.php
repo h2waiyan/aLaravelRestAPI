@@ -47,6 +47,7 @@ Route::group([
 
     // patients
     Route::get('patients', [PatientsController::class, 'index']);
+    Route::get('vot_patients', [PatientsController::class, 'vot_index']);
     Route::post('patients', [PatientsController::class, 'store']);
     Route::get('patients/{id}', [PatientsController::class, 'show']);
     Route::put('patients/{id}/edit', [PatientsController::class, 'edit']);

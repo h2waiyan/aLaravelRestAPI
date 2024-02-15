@@ -29,7 +29,7 @@ return new class extends Migration
             $table->boolean('is_vot_patient');
             $table->integer('volunteer_id');
             $table->date('vot_start_date');
-            $table->integer('vot_id');
+            $table->integer('vot_type');
         });
     }
 

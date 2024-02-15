@@ -18,7 +18,8 @@ class VolController extends Controller
         } else {
             $data = [
                 'status' => 'error',
-                'message' => 'No volunteers found.'
+                'message' => 'No volunteers found.',
+                'volunteers' => []
             ];
         }
         return response()->json($data, 200);
